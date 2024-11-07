@@ -1,0 +1,53 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+class node{
+    public:
+    char data;
+    int freq;
+    node* left,* right;
+    
+    node(char d,int f){
+        data=d;
+        freq=f;
+        left=right=NULL;
+    }
+};
+struct cmp{
+    bool operator()(node* a,node* b){
+        return a->freq > b->freq;
+    }
+};
+void printNodes(node* root,string s){
+    if(!root)return;
+    if(root->data != '$'){
+        cout<<root->data<<" : "<<s<<endl;
+    }
+    
+    printNodes(root->left,s+'0');
+    printNodes(root->right,s+'1');
+}
+void huffman(vector<char>data,vector<int>freq){
+    node* left,* right,* temp;
+    priority_queue<node*,vector<node*>,cmp>pq;
+    for(int i=0;i<data.size();i++){
+        pq.push(new node(data[i],freq[i]));
+    }
+    while(pq.size()>1){
+        left=pq.top();
+        pq.pop();
+        right=pq.top();
+        pq.pop();
+        temp=new node('$',left->freq+right->freq);
+        temp->left=left;
+        temp->right=right;
+        pq.push(temp);
+    }
+    printNodes(pq.top(),"");
+}
+int main(){
+    vector<char>data={'A','B','C','D'};
+
+    vector<int>freq={23,12,34,10};
+    huffman(data,freq);
+}

@@ -1,0 +1,60 @@
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+int cnt=0;
+int x,y;
+bool isSafe(vector<vector<int>>&board,int row,int col,int n){
+    for(int i=0;i<n;i++){
+        if(board[row][i])return false;
+    }
+    for(int i=row,j=col;i>=0&& j>=0;i--,j--){
+        if(board[i][j])return false;
+    }
+    for(int i=row,j=col;i<n&& j>=0;i++,j--){
+        if(board[i][j])return false;
+    }
+    for(int i=row,j=col;i>=0&& j<n;i--,j++){
+        if(board[i][j])return false;
+    }
+    for(int i=row,j=col;i<n&& j<n;i++,j++){
+        if(board[i][j])return false;
+    }
+    return true;
+}
+void printBoard(vector<vector<int>>&board,int n){
+    for(int i=0;i<n;i++){
+        for(int j=0;j<n;j++){
+            if(board[i][j])cout<<"Q ";
+            else cout<<". ";
+        }
+        cout<<endl;
+    }
+    cout<<endl;
+}
+void solve(int col,vector<vector<int>>&board,int n){
+    if(col==n){
+        printBoard(board,n);
+        cnt++;
+        return;
+    }
+    if(col==y)solve(col+1,board,n);
+    for(int i=0;i<n;i++){
+        if(isSafe(board,i,col,n)){
+            board[i][col]=1;
+            solve(col+1,board,n);
+            board[i][col]=0;
+        }
+    }
+}
+void nqueen(int n){
+    vector<vector<int>>board(n,vector<int>(n,0));
+    board[x][y]=1;
+    solve(0,board,n);
+}
+int main(){
+    int n;
+    cin>>n;
+    
+    cin>>x>>y;
+    nqueen(n);
+}
